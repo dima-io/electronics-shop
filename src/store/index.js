@@ -8,6 +8,7 @@ export default createStore({
         laptops: null,
         smartphones: null,
         powerSupplies: null,
+        allCategories: []
     },
 
     mutations: {
@@ -33,6 +34,13 @@ export default createStore({
             } else if (category === 'smartphones') {
                 state.smartphones = value;
             }
+        },
+
+        setDataForAllCategories(state, value) {
+            const data = value.value;
+            data.forEach((category) => {
+                state.allCategories.push(...category.products);
+            });
         }
     },
     actions: {
@@ -40,15 +48,23 @@ export default createStore({
                 context.commit('addToOrdering', payload);
         },
 
-        fetchCategoriesData(context, { category, queryParam }) {
+        fetchCategoriesData(context, { category = null, queryParam = null }) {
              ApiService.getCategories(queryParam)
                  .then((res) => {
-                     const data = res.data[0]?.products;
-                     context.commit('setDataForSpecificCategory', {category, value: data});
+                     if (queryParam !== null && category !== null) {
+                         const data = res.data[0]?.products;
+                         context.commit('setDataForSpecificCategory', {category, value: data});
+                     } else {
+                         const data = res.data;
+                         context.commit('setDataForAllCategories', {value: data});
+                     }
                  });
         }
     },
     getters: {
+        getAllCategories(state) {
+            return state.allCategories;
+        },
         getOrderingData(state) {
             return state.orderingData;
         },

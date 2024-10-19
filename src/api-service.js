@@ -7,6 +7,6 @@ export default {
     // },
 
     getCategories(queryParam) {
-        return axios.get(`/categories?name=${queryParam}`)
+        return queryParam ? axios.get(`/categories?name=${queryParam}`) : axios.get(`/categories`);
     }
 }

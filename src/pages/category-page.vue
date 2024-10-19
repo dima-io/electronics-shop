@@ -12,6 +12,7 @@
 import axios from "axios";
 import AppCardsInformation from  "@/components/cards-information"
 import AppPagination from "@/components/pagination";
+import {mapState} from "vuex";
 
 
 export default {
@@ -27,6 +28,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      allCategories: (state) => state.allCategories,
+    }),
     query() {
       return this.$route.query.name;
     },
@@ -101,6 +105,10 @@ export default {
   },
   created() {
     this.fetchCategoryData(this.selectedItem !== undefined);
+
+    this.$store.dispatch('fetchCategoriesData', { category: null, queryParam: null });
+
+    console.log('allCategories', this.allCategories)
   },
   watch: {
     query: 'fetchCategoryData',
