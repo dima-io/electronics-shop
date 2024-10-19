@@ -1,4 +1,5 @@
 <template>
+  <teleport to="#app">
   <div class="modal-form" v-if="show">
     <div class="modal-content-form">
       <div class="modal-content">
@@ -23,6 +24,7 @@
       </div>
     </div>
   </div>
+  </teleport>
 </template>
 
 <script>
@@ -44,7 +46,7 @@ export default {
   methods: {
       closeModal() {
         this.$emit('close');
-        document.body.classList.remove('modal-open'); // Видаляємо клас при закритті
+        document.body.classList.remove('modal-open');
       }
   },
   mounted() {
