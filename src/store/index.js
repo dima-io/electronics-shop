@@ -8,6 +8,7 @@ export default createStore({
         laptops: null,
         smartphones: null,
         powerSupplies: null,
+        televisions: null,
         allCategories: []
     },
 
@@ -26,14 +27,17 @@ export default createStore({
 
             localStorage.setItem('orderingData', JSON.stringify(storedData));
         },
-        setDataForSpecificCategory(state, {category, value}) {
-            if (category === 'laptops') {
+        setDataForSpecificCategory(state, {queryParam, value}) {
+            if (queryParam === 'laptops') {
                 state.laptops = value;
-            } else if (category === 'power-supplies') {
+            } else if (queryParam === 'power-supplies') {
                 state.powerSupplies = value;
-            } else if (category === 'smartphones') {
+            } else if (queryParam === 'smartphones') {
                 state.smartphones = value;
+            } else if (queryParam === 'televisions') {
+                state.televisions = value;
             }
+
         },
 
         setDataForAllCategories(state, value) {
@@ -48,12 +52,12 @@ export default createStore({
                 context.commit('addToOrdering', payload);
         },
 
-        fetchCategoriesData(context, { category = null, queryParam = null }) {
+        fetchCategoriesData(context, { queryParam = null }) {
              ApiService.getCategories(queryParam)
                  .then((res) => {
-                     if (queryParam !== null && category !== null) {
+                     if (queryParam != null) {
                          const data = res.data[0]?.products;
-                         context.commit('setDataForSpecificCategory', {category, value: data});
+                         context.commit('setDataForSpecificCategory', {queryParam, value: data});
                      } else {
                          const data = res.data;
                          context.commit('setDataForAllCategories', {value: data});
@@ -76,11 +80,16 @@ export default createStore({
             return state.laptops
         },
         getPowerSupplies(state) {
+            console.log('state', state)
             return state.powerSupplies
         },
         getSmartphones(state) {
            return state.smartphones
-        }
+        },
+        getTelevision(state) {
+            console.log('state', state)
+            return state.televisions
+        },
     }
 })
 
