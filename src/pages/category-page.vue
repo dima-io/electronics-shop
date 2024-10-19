@@ -2,17 +2,22 @@
   <div class="container">
     <app-cards-information v-if="cardsData && cardsData.length" :cardsData="cardsData"></app-cards-information>
     <p v-else>Нічого не знайдено.</p>
+    <div class="d-flex flex-column align-items-center gap-4 mb-5">
+      <app-pagination></app-pagination>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import AppCardsInformation from  "@/components/cards-information"
+import AppPagination from "@/components/pagination";
 
 
 export default {
   name: "category-page",
   components: {
+    AppPagination,
     AppCardsInformation
   },
   props: ["prm"],
@@ -52,15 +57,11 @@ export default {
             params.name = this.query.toLowerCase();
             response = await axios.get(`/categories`, { params });
           } else {
-            console.log('6')
             response = await axios.get(`/categories`);
           }
         }
 
         if (response.data.length > 0 && !this.btnSearTerm) {
-          console.log('1')
-          // this.cardsData = response.data[0].products || [];
-
           response.data.forEach((category) => {
             this.cardsData.push(...category.products);
           });

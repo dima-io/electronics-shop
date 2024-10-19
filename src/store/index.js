@@ -43,7 +43,7 @@ export default createStore({
         fetchCategoriesData(context, { category, queryParam }) {
              ApiService.getCategories(queryParam)
                  .then((res) => {
-                     const data = res.data[0]?.products.slice(0, 6);
+                     const data = res.data[0]?.products;
                      context.commit('setDataForSpecificCategory', {category, value: data});
                  });
         }
