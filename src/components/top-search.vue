@@ -117,4 +117,5 @@ export default {
   text-decoration: none;
   background-color: var(--bs-list-group-action-hover-bg);
 }
+
 </style>

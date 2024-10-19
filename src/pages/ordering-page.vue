@@ -1,8 +1,11 @@
 <template>
  <div class="container my-5">
-   <h1>Ordering page</h1>
-
-   <pre>{{orderingData}}</pre>
+   <div class="d-flex justify-content-between">
+     <h1>Ordering page</h1>
+     <div>
+       <a>Clear an ordering</a>
+     </div>
+   </div>
  </div>
 </template>
 
@@ -11,6 +14,7 @@ import {mapState} from "vuex";
 
 export default {
   name: "ordering-page",
+  components: {},
   computed: {
     ...mapState({
       orderingData: (state) => state.orderingData,
