@@ -74,20 +74,9 @@ export default {
   name: "top-nav-menu",
   components: {OrderingPopup},
   computed: {
-    counter() {
-      return this.$store.state.counter
-    },
     ...mapGetters(['orderingDataLength'])
   },
   methods: {
-    goToOrderingPage() {
-      // if(this.orderingDataLength > 0) {
-      //   this.$router.push('/ordering-page');
-      // }
-
-      this.$router.push('/ordering-page');
-    },
-
     openPopup() {
       this.isModalVisible = true;
       document.body.classList.add('modal-open');
@@ -105,9 +94,6 @@ export default {
 </script>
 
 <style scoped>
-.topnav {
-  background: rgba(255,255,255, 0.1);
-}
  .mobile-view.menu {
     position: fixed;
     height: 100vh;
