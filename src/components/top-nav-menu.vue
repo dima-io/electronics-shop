@@ -3,7 +3,7 @@
       <div class="row">
         <div class="col-lg-2 col-sm-2">
         <span class="topnav__logo">
-          <router-link to="/">XXX</router-link>
+          <router-link to="/">Tech<span style="background: orange">Hub</span></router-link>
         </span>
         </div>
         <div class="col-lg-5 col-sm-10 align-content-center">

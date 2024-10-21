@@ -5,7 +5,7 @@
             <div class="col-xl-8 col-lg-12">
               <div class="footer-menu">
                 <div class="footer-menu__container footer-menu__container-mta">
-                  <div class="footer-menu__container-title">XXX</div>
+                  <div class="footer-menu__container-title">Techhub</div>
                   <ul class="footer-menu-list">
                     <li class="footer-menu-list__item">
                       <a href="#" class="footer-menu-list__link">Про компанію</a>

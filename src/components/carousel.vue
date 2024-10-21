@@ -4,8 +4,8 @@
       <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
       <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
       <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 3"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 3"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
     </div>
     <div class="carousel-inner">
       <div class="carousel-item active">
@@ -70,7 +70,7 @@ export default {
   background-position: center;
 }
 
-.slide-1 {
+.slide-4 {
   background-image: url('../../public/assets/images/gross-camera.jpg');
 }
 .slide-2 {
@@ -81,7 +81,7 @@ export default {
   background-image: url('../../public/assets/images/nature.jpg');
 }
 
-.slide-4 {
+.slide-1 {
   background-image: url('../../public/assets/images/pen-phone.jpg');
 }
 
