@@ -9,13 +9,23 @@ export default createStore({
         smartphones: null,
         powerSupplies: null,
         televisions: null,
-        allCategories: []
+        allCategories: [],
+        allBrands: [],
+        selectedBrandsByBtnSearch: null
     },
 
     mutations: {
         loadOrderingData(state) {
             const storedData = JSON.parse(localStorage.getItem('orderingData')) || [];
             state.orderingData = storedData;
+        },
+
+        setAllBrands(state, payload) {
+            state.allBrands = payload.value;
+        },
+
+        selectedBrandsByBtnSearch(state, payload) {
+            state.selectedBrandsByBtnSearch = payload.value;
         },
 
         addToOrdering(state, payload) {
@@ -63,6 +73,27 @@ export default createStore({
                          context.commit('setDataForAllCategories', {value: data});
                      }
                  });
+        },
+        findBrandsByBtnSearTerm(context, { searchedData }) {
+            console.log('works')
+            context.dispatch('fetchAllBrandsData')
+                .then(res => {
+                    const data = res.data;
+                    const allProducts = data.flatMap(product => product.products);
+                    const filteredProducts = allProducts.filter(product =>
+                        product.name.toLowerCase().includes(searchedData.toLowerCase())
+                    );
+
+                    context.commit('selectedBrandsByBtnSearch', {value: filteredProducts})
+                })
+        },
+
+        fetchAllBrandsData(context) {
+            return ApiService.getBrands()  // Повертаємо проміс
+                .then(res => {
+                    context.commit('setAllBrands', { value: res });
+                    return res;
+                });
         }
     },
     getters: {
@@ -80,16 +111,22 @@ export default createStore({
             return state.laptops
         },
         getPowerSupplies(state) {
-            console.log('state', state)
             return state.powerSupplies
         },
         getSmartphones(state) {
            return state.smartphones
         },
         getTelevision(state) {
-            console.log('state', state)
             return state.televisions
         },
+
+        getAllBrandsData(state) {
+            return state.allBrands
+        },
+
+        getSelectedBrandsBySearchBtn(state) {
+            return state.selectedBrandsByBtnSearch
+        }
     }
 })
 

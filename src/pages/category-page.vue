@@ -1,9 +1,8 @@
 <template>
   <div class="container">
-    <app-cards-information v-if="cardsDataFromStore && cardsDataFromStore.length" :cardsData="cardsDataFromStore"></app-cards-information>
-    <h3>Directly from axios</h3>
-    <app-cards-information v-if="cardsData && cardsData.length" :cardsData="cardsData"></app-cards-information>
-    <p v-else>Нічого не знайдено.</p>
+    <app-cards-information v-if="!selectedBrandsBySearchBtn && cardsDataFromStore && cardsDataFromStore.length" :cardsData="cardsDataFromStore"></app-cards-information>
+<!--<pre>{{selectedBrandsBySearchBtn}}</pre>-->
+    <app-cards-information v-if="selectedBrandsBySearchBtn && selectedBrandsBySearchBtn.length" :cardsData="selectedBrandsBySearchBtn"></app-cards-information>
     <div class="d-flex flex-column align-items-center gap-4 mb-5">
       <app-pagination></app-pagination>
     </div>
@@ -52,11 +51,13 @@ export default {
     },
     allCategories() {
       return this.$store.getters.getAllCategories;
+    },
+    selectedBrandsBySearchBtn() {
+      return this.$store.getters.getSelectedBrandsBySearchBtn;
     }
   },
   methods: {
     fetchDataFromStore() {
-      console.log('btnSearTerm', this.btnSearTerm)
 
       if(this.btnSearTerm) {
         return;
@@ -84,8 +85,15 @@ export default {
         case "televisions":
           this.cardsDataFromStore = this.televisions;
           break;
+        case "btnSearTerm":
+          this.cardsDataFromStore = this.selectedBrandsBySearchBtn;
+          break;
         default:
-          this.cardsDataFromStore = this.allCategories;
+          if (this.btnSearTerm) {
+            this.cardsDataFromStore = this.selectedBrandsBySearchBtn;
+          } else {
+            this.cardsDataFromStore = this.allCategories;
+          }
       }
     },
 
@@ -96,7 +104,7 @@ export default {
 
         if (this.prm === "brands") {
           if (this.btnSearTerm) {
-            response = await axios.get(`/brands`, { params });
+             response = await axios.get(`/brands`, { params });
           } else if (this.query) {
             params.name = this.query.toLowerCase();
             response = await axios.get(`/brands`, { params });
@@ -116,8 +124,6 @@ export default {
             this.filteredProducts = allProducts.filter(product =>
                 product.name.toLowerCase().includes(this.btnSearTerm.toLowerCase())
             );
-            this.cardsData = this.filteredProducts;
-            console.log('filteredProducts', this.filteredProducts)
           }
         }
       } catch (error) {
@@ -127,12 +133,12 @@ export default {
   },
 
   created() {
-    this.fetchCategoryData(this.selectedItem !== undefined);
+    // this.fetchCategoryData(this.selectedItem !== undefined);
     this.fetchDataFromStore();
   },
 
   watch: {
-    query: ["fetchCategoryData", "fetchDataFromStore"],
+    query: ["fetchDataFromStore"],
     smartphones(newVal) {
       if (newVal) {
         this.displaySpecificCards();
@@ -154,8 +160,10 @@ export default {
       }
     },
     btnSearTerm: {
-      handler() {
-        this.fetchCategoryData();
+      handler(newVal) {
+        if (newVal && newVal.trim()) {
+          this.$store.dispatch("findBrandsByBtnSearTerm", { searchedData: newVal });
+        }
       },
       immediate: true,
     },
