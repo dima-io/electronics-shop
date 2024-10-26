@@ -93,14 +93,17 @@ export default {
           };
         });
       }
-    }
 
+    },
   },
 
   watch: {
     cardsData: {
-      handler() {
-        this.updateCards();
+      handler(newValue) {
+        if(newValue) {
+          console.log('cardsData', this.cardsData)
+          this.updateCards();
+        }
       },
       immediate: true,
     }

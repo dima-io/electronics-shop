@@ -1,13 +1,9 @@
 <template>
   <div class="container">
-    <pre>{{ getDeviceById }}</pre>
-    <pre>{{ cardsDataFromStore }}</pre>
-    <app-cards-information v-if="!selectedBrandsBySearchBtn && cardsDataFromStore && cardsDataFromStore.length" :cardsData="cardsDataFromStore"></app-cards-information>
-    <app-cards-information v-if="selectedBrandsBySearchBtn && selectedBrandsBySearchBtn.length" :cardsData="selectedBrandsBySearchBtn"></app-cards-information>
-    <div class="d-flex flex-column align-items-center gap-4 mb-5">
+
+    <app-cards-information v-if="cardsDataFromStore && cardsDataFromStore && cardsDataFromStore.length" :cardsData="cardsDataFromStore"></app-cards-information>
       <app-pagination></app-pagination>
     </div>
-  </div>
 </template>
 
 <script>
@@ -24,7 +20,7 @@ export default {
   data() {
     return {
       cardsData: [],
-      cardsDataFromStore: []
+      cardsDataFromStore: [],
     };
   },
   computed: {
@@ -93,7 +89,7 @@ export default {
           if (this.btnSearTerm) {
             this.cardsDataFromStore = this.selectedBrandsBySearchBtn;
           } else if (this.selectedItem) {
-            this.cardsDataFromStore = this.getDeviceById; // Оновлено
+            this.cardsDataFromStore = this.getDeviceById;
           } else {
             this.cardsDataFromStore = this.allCategories;
           }
@@ -126,6 +122,8 @@ export default {
       handler(newVal) {
         if (newVal && newVal.trim()) {
           this.$store.dispatch("findBrandsByBtnSearTerm", { searchedData: newVal });
+
+          this.cardsDataFromStore = this.selectedBrandsBySearchBtn
         }
       },
       immediate: true,
@@ -140,7 +138,7 @@ export default {
     },
     getDeviceById: {
       handler(newVal) {
-        if (newVal && newVal.length) { // Додана перевірка на наявність елементів
+        if (newVal && newVal.length) {
           this.cardsDataFromStore = newVal; // Оновлено
         }
       },
