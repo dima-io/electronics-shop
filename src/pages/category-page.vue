@@ -1,8 +1,7 @@
 <template>
   <div class="container">
-
     <app-cards-information v-if="cardsDataFromStore && cardsDataFromStore && cardsDataFromStore.length" :cardsData="cardsDataFromStore"></app-cards-information>
-      <app-pagination></app-pagination>
+    <app-pagination></app-pagination>
     </div>
 </template>
 
@@ -53,9 +52,32 @@ export default {
     },
     getDeviceById() {
       return this.$store.getters.getDeviceById({ brand: this.query, id: this.selectedItem });
-    }
+    },
+
+    samsung() {
+      return this.$store.getters.getSamsung;
+    },
+    xiaomi() {
+      return this.$store.getters.getXiaomi;
+    },
+    dyson() {
+      return this.$store.getters.getDyson;
+    },
+    baseus() {
+      return this.$store.getters.getBaseus;
+    },
   },
   methods: {
+    fetchBrandsFromStore() {
+      const params = {};
+      this.query ? params.name = this.query.toLowerCase() : null;
+      this.$store
+          .dispatch("fetchAllBrandsData", { query: params.name})
+          .then(() => {
+            this.displaySpecificCards();
+          })
+
+    },
     fetchCategoriesFromStore() {
       if (this.btnSearTerm) {
         return;
@@ -63,13 +85,25 @@ export default {
       const params = {};
       this.query ? params.name = this.query.toLowerCase() : null;
       this.$store
-          .dispatch("fetchCategoriesData", { category: null, queryParam: params.name || null })
+          .dispatch("fetchCategoriesData", { category: null, queryParam: (this.selectedItem ? null  : params.name) || null })
           .then(() => {
             this.displaySpecificCards();
           });
     },
     displaySpecificCards() {
       switch (this.query) {
+        case "xiaomi":
+          this.cardsDataFromStore = this.xiaomi;
+          break;
+        case "samsung":
+          this.cardsDataFromStore = this.samsung;
+          break;
+        case "dyson":
+          this.cardsDataFromStore = this.dyson;
+          break;
+        case "baseus":
+          this.cardsDataFromStore = this.baseus;
+          break;
         case "smartphones":
           this.cardsDataFromStore = this.smartphones;
           break;
@@ -97,7 +131,15 @@ export default {
     },
   },
   watch: {
-    query: ["fetchCategoriesFromStore"],
+    query: {
+      handler() {
+        if(this.prm !== 'brands') {
+          this.fetchCategoriesFromStore();
+        }
+
+      },
+      immediate: true,
+    },
     smartphones(newVal) {
       if (newVal) {
         this.displaySpecificCards();
@@ -131,7 +173,7 @@ export default {
     selectedItem: {
       handler(newVal) {
         if (newVal && newVal.trim()) {
-          this.cardsDataFromStore = this.getDeviceById; // Оновлено
+          this.cardsDataFromStore = this.getDeviceById;
         }
       },
       immediate: true,
@@ -139,17 +181,18 @@ export default {
     getDeviceById: {
       handler(newVal) {
         if (newVal && newVal.length) {
-          this.cardsDataFromStore = newVal; // Оновлено
+          this.cardsDataFromStore = newVal;
         }
       },
       immediate: true,
-    }
+    },
+
   },
   created() {
-    this.fetchCategoriesFromStore();
-    // Додано для ініціалізації даних при створенні компонента
+    this.prm === 'brands' ? this.fetchBrandsFromStore() : this.fetchCategoriesFromStore();
+
     if (this.selectedItem) {
-      this.cardsDataFromStore = this.getDeviceById; // Додано
+      this.cardsDataFromStore = this.getDeviceById;
     }
   },
 };

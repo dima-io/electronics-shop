@@ -11,6 +11,10 @@ export default createStore({
         televisions: null,
         allCategories: [],
         allBrands: [],
+        xiaomi: [],
+        samsung: [],
+        dyson: [],
+        baseus: [],
         selectedBrandsByBtnSearch: null,
         fetchBrandById: null
     },
@@ -21,8 +25,16 @@ export default createStore({
             state.orderingData = storedData;
         },
 
-        setAllBrands(state, payload) {
-            state.allBrands = payload.value;
+        setAllBrands(state, {value, query}) {
+            if (query === 'xiaomi') {
+                state.xiaomi = value;
+            } else if (query === 'samsung') {
+                state.samsung = value;
+            } else if (query === 'dyson') {
+                state.dyson = value;
+            } else if (query === 'baseus') {
+                state.baseus = value;
+            }
         },
 
         selectedBrandsByBtnSearch(state, payload) {
@@ -54,8 +66,6 @@ export default createStore({
         setDataForAllCategories(state, value) {
             const data = value.value;
             state.allCategories = data.flatMap(category => category.products);
-            console.log('Received categories data:', data);
-            console.log('state.allCategories', state.allCategories);
         }
     },
     actions: {
@@ -64,13 +74,17 @@ export default createStore({
         },
 
         fetchCategoriesData(context, { queryParam = null }) {
+            console.log('works')
              ApiService.getCategories(queryParam)
                  .then((res) => {
+                     console.log('queryParam', queryParam)
                      if (queryParam != null) {
+                         console.log('2')
                          const data = res.data[0]?.products;
                          context.commit('setDataForSpecificCategory', {queryParam, value: data});
                      } else {
                          const data = res.data;
+                         console.log('1')
                          context.commit('setDataForAllCategories', {value: data});
                      }
                  });
@@ -78,23 +92,21 @@ export default createStore({
         findBrandsByBtnSearTerm(context, { searchedData }) {
             ApiService.getCategories()
                 .then(res => {
-                    console.log('res', res)
                     const data = res.data;
                     const allProducts = data.flatMap(product => product.products);
-                     console.log('searchedData',searchedData);
                     const filteredProducts = allProducts.filter(product =>
                         product.name.toLowerCase().includes(searchedData.toLowerCase())
                     );
-                    console.log('filteredProducts', filteredProducts)
                     context.commit('selectedBrandsByBtnSearch', {value: filteredProducts})
                 })
         },
 
 
-        fetchAllBrandsData(context) {
-            return ApiService.getBrands()
+        fetchAllBrandsData(context, {query}) {
+            return ApiService.getBrands(query)
                 .then(res => {
-                    context.commit('setAllBrands', { value: res });
+                    const data = res.data[0]?.products;
+                    context.commit('setAllBrands', { value: data , query: query});
                     return res;
                 });
         }
@@ -128,16 +140,25 @@ export default createStore({
         },
 
         getSelectedBrandsBySearchBtn(state) {
-            console.log('state.selectedBrandsByBtnSearch', state.selectedBrandsByBtnSearch)
             return state.selectedBrandsByBtnSearch
         },
 
         getDeviceById: (state) => ({ brand, id }) => {
-            console.log("brand", brand);
-            console.log("id", id);
-            console.log('getDeviceById', state.allCategories.filter(product => product.brand === brand && product.id === +id))
             return state.allCategories.filter(product => product.brand === brand && product.id === +id)
-        }
+        },
+
+        getXiaomi(state) {
+            return state.xiaomi;
+        },
+        getSamsung(state) {
+            return state.samsung;
+        },
+        getDyson(state) {
+            return state.dyson;
+        },
+        getBaseus(state) {
+            return state.baseus;
+        },
     }
 })
 
