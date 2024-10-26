@@ -744,7 +744,7 @@
           "hovered": false
         },
         {
-          "id": 1,
+          "id": 2,
           "brand": "ecoflow",
           "name": "Зарядна станція EcoFlow RIVER 2 Pro",
           "cashback": 136,
@@ -755,7 +755,7 @@
           "hovered": false
         },
         {
-          "id": 1,
+          "id": 3,
           "brand": "ecoflow",
           "name": "Зарядна станція EcoFlow RIVER 2 Pro",
           "cashback": 136,
@@ -766,7 +766,7 @@
           "hovered": false
         },
         {
-          "id": 1,
+          "id": 4,
           "brand": "ecoflow",
           "name": "Зарядна станція EcoFlow RIVER 2 Pro",
           "cashback": 136,
@@ -778,7 +778,7 @@
         },
 
         {
-          "id": 1,
+          "id": 5,
           "brand": "baseus-bipow",
           "name": "Baseus Bipow Digital Display 30000mAh 20W Black",
           "cashback": 130,
@@ -789,7 +789,7 @@
           "hovered": false
         },
         {
-          "id": 2,
+          "id": 6,
           "brand": "neo",
           "name": "Ліхтарик Neo Tools 99-037 Black",
           "price": 1649,

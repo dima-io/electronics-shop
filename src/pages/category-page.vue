@@ -1,7 +1,8 @@
 <template>
   <div class="container">
+    <pre>{{ getDeviceById }}</pre>
+    <pre>{{ cardsDataFromStore }}</pre>
     <app-cards-information v-if="!selectedBrandsBySearchBtn && cardsDataFromStore && cardsDataFromStore.length" :cardsData="cardsDataFromStore"></app-cards-information>
-
     <app-cards-information v-if="selectedBrandsBySearchBtn && selectedBrandsBySearchBtn.length" :cardsData="selectedBrandsBySearchBtn"></app-cards-information>
     <div class="d-flex flex-column align-items-center gap-4 mb-5">
       <app-pagination></app-pagination>
@@ -53,12 +54,14 @@ export default {
     },
     selectedBrandsBySearchBtn() {
       return this.$store.getters.getSelectedBrandsBySearchBtn;
+    },
+    getDeviceById() {
+      return this.$store.getters.getDeviceById({ brand: this.query, id: this.selectedItem });
     }
   },
   methods: {
-    fetchDataFromStore() {
-
-      if(this.btnSearTerm) {
+    fetchCategoriesFromStore() {
+      if (this.btnSearTerm) {
         return;
       }
       const params = {};
@@ -69,7 +72,6 @@ export default {
             this.displaySpecificCards();
           });
     },
-
     displaySpecificCards() {
       switch (this.query) {
         case "smartphones":
@@ -90,54 +92,16 @@ export default {
         default:
           if (this.btnSearTerm) {
             this.cardsDataFromStore = this.selectedBrandsBySearchBtn;
+          } else if (this.selectedItem) {
+            this.cardsDataFromStore = this.getDeviceById; // Оновлено
           } else {
             this.cardsDataFromStore = this.allCategories;
           }
       }
     },
-
-    // async fetchCategoryData(searchSelected = false) {
-    //   try {
-    //     let response;
-    //     const params = {};
-    //
-    //     if (this.prm === "brands") {
-    //       if (this.btnSearTerm) {
-    //          response = await axios.get(`/brands`, { params });
-    //       } else if (this.query) {
-    //         params.name = this.query.toLowerCase();
-    //         response = await axios.get(`/brands`, { params });
-    //       } else {
-    //         response = await axios.get(`/brands`);
-    //       }
-    //     }
-    //
-    //     if (response.data.length > 0 && !this.btnSearTerm) {
-    //       if (searchSelected && this.selectedItem) {
-    //         this.cardsData = this.cardsData.filter(product => product.id === +this.selectedItem);
-    //       }
-    //     } else {
-    //       if (this.btnSearTerm) {
-    //         this.cardsData = response.data;
-    //         const allProducts = this.cardsData.flatMap(product => product.products);
-    //         this.filteredProducts = allProducts.filter(product =>
-    //             product.name.toLowerCase().includes(this.btnSearTerm.toLowerCase())
-    //         );
-    //       }
-    //     }
-    //   } catch (error) {
-    //     console.error("Помилка при завантаженні категорії:", error);
-    //   }
-    // },
   },
-
-  created() {
-    // this.fetchCategoryData(this.selectedItem !== undefined);
-    this.fetchDataFromStore();
-  },
-
   watch: {
-    query: ["fetchDataFromStore"],
+    query: ["fetchCategoriesFromStore"],
     smartphones(newVal) {
       if (newVal) {
         this.displaySpecificCards();
@@ -166,7 +130,30 @@ export default {
       },
       immediate: true,
     },
-  }
+    selectedItem: {
+      handler(newVal) {
+        if (newVal && newVal.trim()) {
+          this.cardsDataFromStore = this.getDeviceById; // Оновлено
+        }
+      },
+      immediate: true,
+    },
+    getDeviceById: {
+      handler(newVal) {
+        if (newVal && newVal.length) { // Додана перевірка на наявність елементів
+          this.cardsDataFromStore = newVal; // Оновлено
+        }
+      },
+      immediate: true,
+    }
+  },
+  created() {
+    this.fetchCategoriesFromStore();
+    // Додано для ініціалізації даних при створенні компонента
+    if (this.selectedItem) {
+      this.cardsDataFromStore = this.getDeviceById; // Додано
+    }
+  },
 };
 </script>
 

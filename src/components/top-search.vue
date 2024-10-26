@@ -13,7 +13,7 @@
         </div>
         <div class="list-group search-container p-2" v-if="filteredProducts.length > 0">
           <router-link
-              :to="{ name: 'Electronic', params: { prm: 'brands' }, query: { name: product.brand, selectedItem: product.id }}"
+              :to="{ name: 'Electronic', params: { prm: 'categories' }, query: { name: product.brand, selectedItem: product.id }}"
               class="list-group-item list-group-item-action search__link"
               v-for="product in filteredProducts"
               :key="product.id"
@@ -54,7 +54,6 @@ export default {
           categoryName: category.name
         }));
 
-        console.log("products", this.products);
       } else {
         console.warn("allCategories is empty or undefined");
       }

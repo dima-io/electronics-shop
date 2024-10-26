@@ -11,7 +11,8 @@ export default createStore({
         televisions: null,
         allCategories: [],
         allBrands: [],
-        selectedBrandsByBtnSearch: null
+        selectedBrandsByBtnSearch: null,
+        fetchBrandById: null
     },
 
     mutations: {
@@ -52,8 +53,9 @@ export default createStore({
 
         setDataForAllCategories(state, value) {
             const data = value.value;
-            // Присвоєння нового масиву для реактивності
             state.allCategories = data.flatMap(category => category.products);
+            console.log('Received categories data:', data);
+            console.log('state.allCategories', state.allCategories);
         }
     },
     actions: {
@@ -74,21 +76,23 @@ export default createStore({
                  });
         },
         findBrandsByBtnSearTerm(context, { searchedData }) {
-            console.log('works')
-            context.dispatch('fetchAllBrandsData')
+            ApiService.getCategories()
                 .then(res => {
+                    console.log('res', res)
                     const data = res.data;
                     const allProducts = data.flatMap(product => product.products);
+                     console.log('searchedData',searchedData);
                     const filteredProducts = allProducts.filter(product =>
                         product.name.toLowerCase().includes(searchedData.toLowerCase())
                     );
-
+                    console.log('filteredProducts', filteredProducts)
                     context.commit('selectedBrandsByBtnSearch', {value: filteredProducts})
                 })
         },
 
+
         fetchAllBrandsData(context) {
-            return ApiService.getBrands()  // Повертаємо проміс
+            return ApiService.getBrands()
                 .then(res => {
                     context.commit('setAllBrands', { value: res });
                     return res;
@@ -124,7 +128,15 @@ export default createStore({
         },
 
         getSelectedBrandsBySearchBtn(state) {
+            console.log('state.selectedBrandsByBtnSearch', state.selectedBrandsByBtnSearch)
             return state.selectedBrandsByBtnSearch
+        },
+
+        getDeviceById: (state) => ({ brand, id }) => {
+            console.log("brand", brand);
+            console.log("id", id);
+            console.log('getDeviceById', state.allCategories.filter(product => product.brand === brand && product.id === +id))
+            return state.allCategories.filter(product => product.brand === brand && product.id === +id)
         }
     }
 })
