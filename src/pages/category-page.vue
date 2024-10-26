@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <app-cards-information v-if="!selectedBrandsBySearchBtn && cardsDataFromStore && cardsDataFromStore.length" :cardsData="cardsDataFromStore"></app-cards-information>
-<!--<pre>{{selectedBrandsBySearchBtn}}</pre>-->
+
     <app-cards-information v-if="selectedBrandsBySearchBtn && selectedBrandsBySearchBtn.length" :cardsData="selectedBrandsBySearchBtn"></app-cards-information>
     <div class="d-flex flex-column align-items-center gap-4 mb-5">
       <app-pagination></app-pagination>
@@ -12,7 +12,6 @@
 <script>
 import AppCardsInformation from "@/components/cards-information";
 import AppPagination from "@/components/pagination";
-import axios from "axios";
 
 export default {
   name: "category-page",
@@ -97,39 +96,39 @@ export default {
       }
     },
 
-    async fetchCategoryData(searchSelected = false) {
-      try {
-        let response;
-        const params = {};
-
-        if (this.prm === "brands") {
-          if (this.btnSearTerm) {
-             response = await axios.get(`/brands`, { params });
-          } else if (this.query) {
-            params.name = this.query.toLowerCase();
-            response = await axios.get(`/brands`, { params });
-          } else {
-            response = await axios.get(`/brands`);
-          }
-        }
-
-        if (response.data.length > 0 && !this.btnSearTerm) {
-          if (searchSelected && this.selectedItem) {
-            this.cardsData = this.cardsData.filter(product => product.id === +this.selectedItem);
-          }
-        } else {
-          if (this.btnSearTerm) {
-            this.cardsData = response.data;
-            const allProducts = this.cardsData.flatMap(product => product.products);
-            this.filteredProducts = allProducts.filter(product =>
-                product.name.toLowerCase().includes(this.btnSearTerm.toLowerCase())
-            );
-          }
-        }
-      } catch (error) {
-        console.error("Помилка при завантаженні категорії:", error);
-      }
-    },
+    // async fetchCategoryData(searchSelected = false) {
+    //   try {
+    //     let response;
+    //     const params = {};
+    //
+    //     if (this.prm === "brands") {
+    //       if (this.btnSearTerm) {
+    //          response = await axios.get(`/brands`, { params });
+    //       } else if (this.query) {
+    //         params.name = this.query.toLowerCase();
+    //         response = await axios.get(`/brands`, { params });
+    //       } else {
+    //         response = await axios.get(`/brands`);
+    //       }
+    //     }
+    //
+    //     if (response.data.length > 0 && !this.btnSearTerm) {
+    //       if (searchSelected && this.selectedItem) {
+    //         this.cardsData = this.cardsData.filter(product => product.id === +this.selectedItem);
+    //       }
+    //     } else {
+    //       if (this.btnSearTerm) {
+    //         this.cardsData = response.data;
+    //         const allProducts = this.cardsData.flatMap(product => product.products);
+    //         this.filteredProducts = allProducts.filter(product =>
+    //             product.name.toLowerCase().includes(this.btnSearTerm.toLowerCase())
+    //         );
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.error("Помилка при завантаженні категорії:", error);
+    //   }
+    // },
   },
 
   created() {

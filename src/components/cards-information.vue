@@ -100,7 +100,6 @@ export default {
   watch: {
     cardsData: {
       handler() {
-        console.log('cardsData', this.cardsData)
         this.updateCards();
       },
       immediate: true,

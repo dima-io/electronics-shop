@@ -52,9 +52,8 @@ export default createStore({
 
         setDataForAllCategories(state, value) {
             const data = value.value;
-            data.forEach((category) => {
-                state.allCategories.push(...category.products);
-            });
+            // Присвоєння нового масиву для реактивності
+            state.allCategories = data.flatMap(category => category.products);
         }
     },
     actions: {
