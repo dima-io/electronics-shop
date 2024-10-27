@@ -16,10 +16,25 @@ export default createStore({
         dyson: [],
         baseus: [],
         selectedBrandsByBtnSearch: null,
-        fetchBrandById: null
+        fetchBrandById: null,
+        currentPage: 1,
+        itemsPerPage: 5,
+        totalPages: 0
     },
 
     mutations: {
+        setCurrentPage(state, page) {
+            state.currentPage = page;
+        },
+
+        setTotalPages(state, page) {
+            state.totalPages = page;
+        },
+
+        setItemsPerPage(state, items) {
+            state.itemsPerPage = items;
+        },
+
         loadOrderingData(state) {
             const storedData = JSON.parse(localStorage.getItem('orderingData')) || [];
             state.orderingData = storedData;
@@ -69,24 +84,30 @@ export default createStore({
         }
     },
     actions: {
+        changePage(context, page) {
+            context.commit("setCurrentPage", page);
+        },
+
+        changeItemPerPage(context, page) {
+            context.commit("setItemsPerPage", page);
+        },
+
         addOrderingStuffs(context, payload) {
-                context.commit('addToOrdering', payload);
+            context.commit('addToOrdering', payload);
         },
 
         fetchCategoriesData(context, { queryParam = null }) {
-            console.log('works')
              ApiService.getCategories(queryParam)
                  .then((res) => {
-                     console.log('queryParam', queryParam)
                      if (queryParam != null) {
-                         console.log('2')
                          const data = res.data[0]?.products;
                          context.commit('setDataForSpecificCategory', {queryParam, value: data});
                      } else {
                          const data = res.data;
-                         console.log('1')
                          context.commit('setDataForAllCategories', {value: data});
                      }
+
+
                  });
         },
         findBrandsByBtnSearTerm(context, { searchedData }) {
@@ -158,6 +179,10 @@ export default createStore({
         },
         getBaseus(state) {
             return state.baseus;
+        },
+
+        getTotalPages(state) {
+            return Math.ceil(Math.ceil(+state.totalPages / state.itemsPerPage));
         },
     }
 })

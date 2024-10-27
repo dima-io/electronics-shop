@@ -1,18 +1,15 @@
 <template>
   <div class="container">
     <app-cards-information v-if="cardsDataFromStore && cardsDataFromStore && cardsDataFromStore.length" :cardsData="cardsDataFromStore"></app-cards-information>
-    <app-pagination></app-pagination>
-    </div>
+  </div>
 </template>
 
 <script>
 import AppCardsInformation from "@/components/cards-information";
-import AppPagination from "@/components/pagination";
 
 export default {
   name: "category-page",
   components: {
-    AppPagination,
     AppCardsInformation
   },
   props: ["prm"],
