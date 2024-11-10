@@ -8,8 +8,9 @@
                  aria-label="Search example"
                  v-model="searchTerm"
                  @input="filterProducts"
+                 @keyup.enter="buttonSearch"
           >
-          <button class="btn btn-primary" type="button" @click="buttonSearch()"><i class="bi bi-search"></i></button>
+          <button class="btn btn-primary" type="button" @click="buttonSearch"><i class="bi bi-search"></i></button>
         </div>
         <div class="list-group search-container p-2" v-if="filteredProducts.length > 0">
           <router-link
