@@ -81,6 +81,12 @@ export default {
     }
   },
 
+  methods: {
+    getAllCategories() {
+      this.$router.push({ name: 'Electronic', params: { prm: "categories"} })
+    }
+  },
+
   computed: {
     laptops() {
       return this.$store.getters.getLaptops?.slice(0,6);
