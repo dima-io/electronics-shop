@@ -87,15 +87,6 @@ export default createStore({
             state.allCategories = data.flatMap(category => category.products);
         },
         clearState(state) {
-            state.smartphones = null;
-            state.powerSupplies = null;
-            state.televisions = null;
-            state.allBrands = [];
-            state.xiaomi = [];
-            state.samsung = [];
-            state.dyson = [];
-            state.baseus = [];
-            state.selectedBrandsByBtnSearch = null;
             state.fetchBrandById = null;
             state.currentPage = 1;
             state.size = 5;
@@ -157,6 +148,7 @@ export default createStore({
     },
     getters: {
         getAllCategories(state) {
+            console.log('allCategories getter',  state.allCategories)
             return state.allCategories;
         },
         getOrderingData(state) {

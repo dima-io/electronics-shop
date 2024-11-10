@@ -1,7 +1,4 @@
 <template>
-<pre>getTotalPages {{getTotalPages}}</pre>
-  <pre>currentPage {{currentPage}}</pre>
-
   <nav aria-label="Page pagination">
     <div class="d-flex justify-content-center">
       <div class="me-3">
