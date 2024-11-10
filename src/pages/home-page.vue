@@ -68,11 +68,14 @@
 import AppCarousel from "@/components/carousel";
 import AppCardsInformation from  "@/components/cards-information"
 import AppFourCards from "@/components/four-cards";
+import {mapMutations} from "vuex";
 
 
 export default {
   name: "home-page",
   components: {AppFourCards, AppCarousel, AppCardsInformation},
+  ...mapMutations(['clearState']),
+
   methods: {
     getAllCategories() {
       this.$router.push({ name: 'Electronic', params: { prm: "categories"} })
@@ -106,6 +109,13 @@ export default {
     },
     smartphones() {
       return this.$store.getters.getSmartphones?.slice(0,6);
+    }
+  },
+  watch: {
+    '$route' (to) {
+      if (to.name === 'home') {
+        this.clearState();
+      }
     }
   },
 

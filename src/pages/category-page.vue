@@ -157,12 +157,19 @@ export default {
         this.displaySpecificCards();
       }
     },
+
+    selectedBrandsBySearchBtn: {
+      handler(newVal) {
+        if (newVal && newVal.length) {
+          this.cardsDataFromStore = newVal;
+        }
+      },
+      immediate: true,
+    },
     btnSearTerm: {
       handler(newVal) {
         if (newVal && newVal.trim()) {
           this.$store.dispatch("findBrandsByBtnSearTerm", { searchedData: newVal });
-
-          this.cardsDataFromStore = this.selectedBrandsBySearchBtn
         }
       },
       immediate: true,

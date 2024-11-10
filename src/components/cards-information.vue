@@ -51,6 +51,7 @@
 <script>
 import { mapActions, mapMutations, mapState } from "vuex";
 import AppPagination from "@/components/pagination";
+import { scrollToTop } from "@/common-methonds";
 
 export default {
   name: "app-cards-information",
@@ -74,16 +75,20 @@ export default {
     };
   },
   computed: {
-    ...mapState(["currentPage", "itemsPerPage"]),
+    ...mapState(["currentPage", "size"]),
     paginatedCards() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.allCards.slice(start, end);
+      if(this.$route.path !== '/') {
+        const start = (this.currentPage - 1) * this.size;
+        const end = start + this.size;
+
+        return this.allCards.slice(start, end);
+      }
+      return this.allCards;
     }
   },
   methods: {
     ...mapActions(['addOrderingStuffs']),
-    ...mapMutations(['setTotalPages']),
+    ...mapMutations(['setNumberOfElements']),
 
     addOrdering(card) {
       this.addOrderingStuffs({ value: card });
@@ -108,8 +113,8 @@ export default {
     },
 
     updatedPages() {
-      const totalPages = Math.ceil(this.allCards.length / this.itemsPerPage);
-      this.setTotalPages(totalPages);
+      this.setNumberOfElements(this.allCards.length);
+      scrollToTop();
     },
   },
 
@@ -128,6 +133,11 @@ export default {
     this.updateCards();
     this.updatedPages();
   },
+
+  mounted() {
+    this.setNumberOfElements(0)
+  }
+
 }
 </script>
 
