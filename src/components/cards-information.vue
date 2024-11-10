@@ -1,8 +1,8 @@
 <template>
   <div class="cards-information mb-lg-5" v-if="cardsData">
-    <div class="section-title my-5" v-if="title">{{title}}</div>
+    <div class="section-title my-5" v-if="title">{{ title }}</div>
     <div class="d-flex flex-wrap justify-content-sm-center justify-content-lg-start gap-lg-3 gap-md-4 gap-sm-1">
-      <div v-for="card in cards"  :key="card.id" class="mb-4">
+      <div v-for="card in paginatedCards" :key="card.id" class="mb-4">
         <div class="card h-100 cards-information-block">
           <div class="card-body d-flex flex-column justify-content-between">
             <img
@@ -12,12 +12,11 @@
                 alt="Card image"
                 :src="card.hovered && card.hoverImage ? `/assets/images${card.hoverImage}` : `/assets/images${card.defaultImage}`"
             />
-             <div class="cards-information__title">
-               <a href="#">{{card.title}}</a>
-             </div>
+            <div class="cards-information__title">
+              <a href="#">{{ card.title }}</a>
+            </div>
             <div class="card-information__additional-info">
-              <div class="mt-3 fw-bolder cards-information__price"><span>{{card.price}} ₴</span>
-              </div>
+              <div class="mt-3 fw-bolder cards-information__price"><span>{{ card.price }} ₴</span></div>
               <div class="d-flex mt-2">
                 <div class="btn btn-outline-secondary icon-button cart-button" @click="addOrdering(card)">
                   <i class="bi bi-cart"></i>
@@ -32,7 +31,7 @@
               </div>
               <div class="d-flex justify-content-between">
                 <div class="cards-information-block__cashback">
-                  <span class="fw-bold">КЕШБЕК {{card.cashback}} ₴</span>
+                  <span class="fw-bold">КЕШБЕК {{ card.cashback }} ₴</span>
                 </div>
                 <div class="cards-information-block__stars">
                   <i v-for="i in Math.floor(card.rate)" :key="i" class="bi bi-star-fill"></i>
@@ -44,14 +43,20 @@
         </div>
       </div>
     </div>
+
+    <app-pagination v-if="$route.path !== '/'"></app-pagination>
   </div>
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
+import AppPagination from "@/components/pagination";
 
 export default {
   name: "app-cards-information",
+  components: {
+    AppPagination
+  },
   props: {
     cardsData: {
       type: Array,
@@ -65,21 +70,28 @@ export default {
   },
   data() {
     return {
-      cards: []
+      allCards: []
+    };
+  },
+  computed: {
+    ...mapState(["currentPage", "itemsPerPage"]),
+    paginatedCards() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.allCards.slice(start, end);
     }
   },
-
   methods: {
     ...mapActions(['addOrderingStuffs']),
+    ...mapMutations(['setTotalPages']),
 
     addOrdering(card) {
       this.addOrderingStuffs({ value: card });
     },
 
-
     updateCards() {
-      if(this.cardsData.length > 0) {
-        this.cards = this.cardsData?.map((card) => {
+      if (this.cardsData.length > 0) {
+        this.allCards = this.cardsData.map((card) => {
           return {
             id: card.id,
             title: card.name,
@@ -89,23 +101,33 @@ export default {
             cashback: card.cashback,
             defaultImage: card.imageUrl,
             hoverImage: card.imageUrl1,
-            hovered: card.hovered
+            hovered: card.hovered || false
           };
         });
       }
-    }
+    },
 
+    updatedPages() {
+      const totalPages = Math.ceil(this.allCards.length / this.itemsPerPage);
+      this.setTotalPages(totalPages);
+    },
   },
 
   watch: {
     cardsData: {
-      handler() {
-        this.updateCards();
+      handler(newValue) {
+        if (newValue) {
+          this.updateCards();
+          this.updatedPages();
+        }
       },
       immediate: true,
     }
   },
-
+  created() {
+    this.updateCards();
+    this.updatedPages();
+  },
 }
 </script>
 

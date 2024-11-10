@@ -13,7 +13,7 @@
         </div>
         <div class="list-group search-container p-2" v-if="filteredProducts.length > 0">
           <router-link
-              :to="{ name: 'Electronic', params: { prm: 'brands' }, query: { name: product.brand, selectedItem: product.id }}"
+              :to="{ name: 'Electronic', params: { prm: 'categories' }, query: { name: product.brand, selectedItem: product.id }}"
               class="list-group-item list-group-item-action search__link"
               v-for="product in filteredProducts"
               :key="product.id"
@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "top-search",
 
@@ -42,21 +40,22 @@ export default {
     };
   },
 
-  methods: {
-    async fetchProducts() {
-      try {
-        const fetchedProducts = await axios.get(`/categories`);
+  computed: {
+    allCategories() {
+      return this.$store.getters.getAllCategories;
+    }
+  },
 
-        if (fetchedProducts.data.length > 0) {
-          this.products = fetchedProducts.data.flatMap(category =>
-              category.products.map(product => ({
-                ...product,
-                categoryName: category.name
-              }))
-          );
-        }
-      } catch (e) {
-        console.log(e);
+  methods: {
+    fetchProducts() {
+      if (this.allCategories && this.allCategories.length) {
+        this.products = this.allCategories.map(category => ({
+          ...category,
+          categoryName: category.name
+        }));
+
+      } else {
+        console.warn("allCategories is empty or undefined");
       }
     },
 
@@ -75,10 +74,10 @@ export default {
 
       this.$router.push({
         name: 'Electronic',
-        params: {prm: 'brands'},
+        params: { prm: 'brands' },
         query: { btnSearTerm: this.btnSearTerm }
       });
-      this.closeSearch()
+      this.closeSearch();
     },
 
     closeSearch() {
@@ -87,10 +86,24 @@ export default {
     }
   },
 
-  created() {
-    this.fetchProducts();
+  async created() {
+    try {
+      await this.$store.dispatch('fetchCategoriesData', '');
+      this.fetchProducts();
+    } catch (error) {
+      console.error("Помилка при завантаженні категорій:", error);
+    }
   },
-}
+
+  watch: {
+    allCategories: {
+      handler() {
+        this.fetchProducts();
+      },
+      immediate: true,
+    }
+  }
+};
 </script>
 
 <style scoped>

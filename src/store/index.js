@@ -8,12 +8,52 @@ export default createStore({
         laptops: null,
         smartphones: null,
         powerSupplies: null,
+        televisions: null,
+        allCategories: [],
+        allBrands: [],
+        xiaomi: [],
+        samsung: [],
+        dyson: [],
+        baseus: [],
+        selectedBrandsByBtnSearch: null,
+        fetchBrandById: null,
+        currentPage: 1,
+        itemsPerPage: 5,
+        totalPages: 0
     },
 
     mutations: {
+        setCurrentPage(state, page) {
+            state.currentPage = page;
+        },
+
+        setTotalPages(state, page) {
+            state.totalPages = page;
+        },
+
+        setItemsPerPage(state, items) {
+            state.itemsPerPage = items;
+        },
+
         loadOrderingData(state) {
             const storedData = JSON.parse(localStorage.getItem('orderingData')) || [];
             state.orderingData = storedData;
+        },
+
+        setAllBrands(state, {value, query}) {
+            if (query === 'xiaomi') {
+                state.xiaomi = value;
+            } else if (query === 'samsung') {
+                state.samsung = value;
+            } else if (query === 'dyson') {
+                state.dyson = value;
+            } else if (query === 'baseus') {
+                state.baseus = value;
+            }
+        },
+
+        selectedBrandsByBtnSearch(state, payload) {
+            state.selectedBrandsByBtnSearch = payload.value;
         },
 
         addToOrdering(state, payload) {
@@ -25,30 +65,77 @@ export default createStore({
 
             localStorage.setItem('orderingData', JSON.stringify(storedData));
         },
-        setDataForSpecificCategory(state, {category, value}) {
-            if (category === 'laptops') {
+        setDataForSpecificCategory(state, {queryParam, value}) {
+            if (queryParam === 'laptops') {
                 state.laptops = value;
-            } else if (category === 'power-supplies') {
+            } else if (queryParam === 'power-supplies') {
                 state.powerSupplies = value;
-            } else if (category === 'smartphones') {
+            } else if (queryParam === 'smartphones') {
                 state.smartphones = value;
+            } else if (queryParam === 'televisions') {
+                state.televisions = value;
             }
+
+        },
+
+        setDataForAllCategories(state, value) {
+            const data = value.value;
+            state.allCategories = data.flatMap(category => category.products);
         }
     },
     actions: {
-        addOrderingStuffs(context, payload) {
-                context.commit('addToOrdering', payload);
+        changePage(context, page) {
+            context.commit("setCurrentPage", page);
         },
 
-        fetchCategoriesData(context, { category, queryParam }) {
+        changeItemPerPage(context, page) {
+            context.commit("setItemsPerPage", page);
+        },
+
+        addOrderingStuffs(context, payload) {
+            context.commit('addToOrdering', payload);
+        },
+
+        fetchCategoriesData(context, { queryParam = null }) {
              ApiService.getCategories(queryParam)
                  .then((res) => {
-                     const data = res.data[0]?.products.slice(0, 6);
-                     context.commit('setDataForSpecificCategory', {category, value: data});
+                     if (queryParam != null) {
+                         const data = res.data[0]?.products;
+                         context.commit('setDataForSpecificCategory', {queryParam, value: data});
+                     } else {
+                         const data = res.data;
+                         context.commit('setDataForAllCategories', {value: data});
+                     }
+
+
                  });
+        },
+        findBrandsByBtnSearTerm(context, { searchedData }) {
+            ApiService.getCategories()
+                .then(res => {
+                    const data = res.data;
+                    const allProducts = data.flatMap(product => product.products);
+                    const filteredProducts = allProducts.filter(product =>
+                        product.name.toLowerCase().includes(searchedData.toLowerCase())
+                    );
+                    context.commit('selectedBrandsByBtnSearch', {value: filteredProducts})
+                })
+        },
+
+
+        fetchAllBrandsData(context, {query}) {
+            return ApiService.getBrands(query)
+                .then(res => {
+                    const data = res.data[0]?.products;
+                    context.commit('setAllBrands', { value: data , query: query});
+                    return res;
+                });
         }
     },
     getters: {
+        getAllCategories(state) {
+            return state.allCategories;
+        },
         getOrderingData(state) {
             return state.orderingData;
         },
@@ -64,7 +151,39 @@ export default createStore({
         },
         getSmartphones(state) {
            return state.smartphones
-        }
+        },
+        getTelevision(state) {
+            return state.televisions
+        },
+
+        getAllBrandsData(state) {
+            return state.allBrands
+        },
+
+        getSelectedBrandsBySearchBtn(state) {
+            return state.selectedBrandsByBtnSearch
+        },
+
+        getDeviceById: (state) => ({ brand, id }) => {
+            return state.allCategories.filter(product => product.brand === brand && product.id === +id)
+        },
+
+        getXiaomi(state) {
+            return state.xiaomi;
+        },
+        getSamsung(state) {
+            return state.samsung;
+        },
+        getDyson(state) {
+            return state.dyson;
+        },
+        getBaseus(state) {
+            return state.baseus;
+        },
+
+        getTotalPages(state) {
+            return Math.ceil(Math.ceil(+state.totalPages / state.itemsPerPage));
+        },
     }
 })
 

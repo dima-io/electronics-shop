@@ -42,13 +42,13 @@ export default {
 
   computed: {
     laptops() {
-      return this.$store.getters.getLaptops;
+      return this.$store.getters.getLaptops?.slice(0,6);
     },
     powerSupplies() {
-      return this.$store.getters.getPowerSupplies;
+      return this.$store.getters.getPowerSupplies?.slice(0,6);
     },
     smartphones() {
-      return this.$store.getters.getSmartphones;
+      return this.$store.getters.getSmartphones?.slice(0,6);
     }
   },
 
