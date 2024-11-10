@@ -13,6 +13,17 @@
           <div class="categories-section__text" v-if="card.title" v-html="card.title"></div>
         </div>
       </template>
+      <template #getAllCategories>
+        <div class="d-flex justify-content-center">
+          <button
+              type="button"
+              class="btn btn-lg btn btn-outline-primary all-categories"
+              @click="getAllCategories()"
+          >
+            Усі категорії
+          </button>
+        </div>
+      </template>
     </app-four-cards>
 
     <app-four-cards
@@ -62,7 +73,11 @@ import AppFourCards from "@/components/four-cards";
 export default {
   name: "home-page",
   components: {AppFourCards, AppCarousel, AppCardsInformation},
-
+  methods: {
+    getAllCategories() {
+      this.$router.push({ name: 'Electronic', params: { prm: "categories"} })
+    }
+  },
   data() {
     return {
       brands: [
@@ -81,11 +96,6 @@ export default {
     }
   },
 
-  methods: {
-    getAllCategories() {
-      this.$router.push({ name: 'Electronic', params: { prm: "categories"} })
-    }
-  },
 
   computed: {
     laptops() {

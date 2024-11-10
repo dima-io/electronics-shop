@@ -11,16 +11,15 @@
       </div>
     </div>
   </div>
+
+  <slot name="getAllCategories"></slot>
+
 </template>
 
 <script>
 export default {
   name: "app-four-cards",
   props: ['flag', 'cardList', 'title'],
-
-  mounted() {
-    console.log('data in four-cards component', this.cardList)
-  }
 }
 </script>
 
