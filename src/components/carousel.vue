@@ -11,7 +11,7 @@
       <div class="carousel-item active">
         <div class="slide slide-1">
           <div class="slide__content">
-            <span class="h1">Новий старт - нові можливості</span>
+            <span class="h1">Нащо воно тобі, купи звичайну ручку</span>
           </div>
         </div>
       </div>
@@ -32,7 +32,7 @@
       <div class="carousel-item">
         <div class="slide slide-4">
           <div class="slide__content">
-            <span class="h1">Нащо воно тобі, купи звичайну ручку</span>
+            <span class="h1">Новий старт - нові можливості</span>
           </div>
         </div>
       </div>
