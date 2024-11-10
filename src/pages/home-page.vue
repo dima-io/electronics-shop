@@ -1,8 +1,32 @@
 <template>
   <app-carousel></app-carousel>
   <div class="home-content">
-    <app-categories></app-categories>
-    <app-brands></app-brands>
+    <app-four-cards
+        :flag="'categories'"
+        :cardList="categories"
+    >
+      <template #default="{ card, flag }">
+        <div v-if="flag === 'categories'" class="d-flex">
+          <div class="categories-section__icon me-3">
+            <i class="bi" :class="card.icon"></i>
+          </div>
+          <div class="categories-section__text" v-if="card.title" v-html="card.title"></div>
+        </div>
+      </template>
+    </app-four-cards>
+
+    <app-four-cards
+        :flag="'brands'"
+        :cardList="brands"
+        :title="'Обирай найкраще'"
+    >
+      <template #default="{ card, flag }">
+        <div v-if="flag === 'brands'" class="d-flex justify-content-center brands__image-wrapper">
+          <img class="brands__image" :src="card.imgUrl" alt="">
+        </div>
+      </template>
+    </app-four-cards>
+
 
 
     <app-cards-information
@@ -31,14 +55,31 @@
 
 <script>
 import AppCarousel from "@/components/carousel";
-import AppBrands from "@/components/app-brands";
 import AppCardsInformation from  "@/components/cards-information"
-import AppCategories from "@/components/app-categories";
+import AppFourCards from "@/components/four-cards";
 
 
 export default {
   name: "home-page",
-  components: {AppBrands, AppCarousel, AppCardsInformation, AppCategories},
+  components: {AppFourCards, AppCarousel, AppCardsInformation},
+
+  data() {
+    return {
+      brands: [
+        {imgUrl: require('../../public/assets/images/xiaomiBrand.svg'), tech: 'xiaomi', param: 'brands'},
+        {imgUrl: require('../../public/assets/images/samsungBrand.svg'), tech: 'samsung', param: 'brands'},
+        {imgUrl: require('../../public/assets/images/dyson-logo.svg'), tech: 'dyson', param: 'brands'},
+        {imgUrl: require('../../public/assets/images/baseus-logo.svg'), tech: 'baseus', param: 'brands'},
+      ],
+
+      categories: [
+        {title: 'Смартфони, <br> телефони', param: 'categories', tech: 'smartphones', icon: 'bi-phone'},
+        {title: 'Телевізор', param: 'categories', tech: 'televisions', icon: 'bi-tv'},
+        {title: 'Ноутбуки', param: 'categories', tech: 'laptops', icon: 'bi-laptop'},
+        {title: 'Електроживлення', param: 'categories', tech: 'power-supplies', icon: 'bi-battery-charging'},
+      ]
+    }
+  },
 
   computed: {
     laptops() {
@@ -68,4 +109,22 @@ export default {
       margin-top: 50px;
     }
   }
+
+.brands__image {
+  width: 100%;
+  max-height: 100%;
+}
+
+.brands__image-wrapper {
+  max-height: 50px;
+}
+
+.categories-section__text {
+  font-size: 16px;
+  align-content: center;
+}
+
+.categories-section__icon i {
+  font-size: 40px;
+}
 </style>
