@@ -18,17 +18,21 @@ export default createStore({
         selectedBrandsByBtnSearch: null,
         fetchBrandById: null,
         currentPage: 1,
-        itemsPerPage: 5,
-        totalPages: 0
+        size: 5,
+        totalPages: 0,
+        numberOfElements: 0
     },
 
     mutations: {
+        changeSize(state, size) {
+            state.size = size;
+        },
         setCurrentPage(state, page) {
             state.currentPage = page;
         },
 
-        setTotalPages(state, page) {
-            state.totalPages = page;
+        setNumberOfElements(state, page) {
+            state.numberOfElements = page;
         },
 
         setItemsPerPage(state, items) {
@@ -81,15 +85,34 @@ export default createStore({
         setDataForAllCategories(state, value) {
             const data = value.value;
             state.allCategories = data.flatMap(category => category.products);
+        },
+        clearState(state) {
+            state.smartphones = null;
+            state.powerSupplies = null;
+            state.televisions = null;
+            state.allBrands = [];
+            state.xiaomi = [];
+            state.samsung = [];
+            state.dyson = [];
+            state.baseus = [];
+            state.selectedBrandsByBtnSearch = null;
+            state.fetchBrandById = null;
+            state.currentPage = 1;
+            state.size = 5;
+            state.totalPages = 0;
+            state.numberOfElements = 0;
         }
     },
     actions: {
+        clearState(context) {
+            context.commit("clearState");
+        },
         changePage(context, page) {
             context.commit("setCurrentPage", page);
         },
 
-        changeItemPerPage(context, page) {
-            context.commit("setItemsPerPage", page);
+        changeSize(context, page) {
+            context.commit("changeSize", page);
         },
 
         addOrderingStuffs(context, payload) {
@@ -182,7 +205,7 @@ export default createStore({
         },
 
         getTotalPages(state) {
-            return Math.ceil(Math.ceil(+state.totalPages / state.itemsPerPage));
+            return Math.ceil(Math.ceil(+state.numberOfElements / state.size ));
         },
     }
 })

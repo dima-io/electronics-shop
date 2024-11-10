@@ -1,4 +1,6 @@
 <template>
+<pre>getTotalPages {{getTotalPages}}</pre>
+  <pre>currentPage {{currentPage}}</pre>
 
   <nav aria-label="Page pagination">
     <div class="d-flex justify-content-center">
@@ -23,7 +25,7 @@
       </div>
       <div>
         <select class="form-select" aria-label="Default select example" @change="updatePages($event.target.value)">
-          <option value="1">5</option>
+          <option value="5">5</option>
           <option value="10">10</option>
           <option value="15">15</option>
         </select>
@@ -33,7 +35,8 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import { scrollToTop } from "@/common-methonds"
 
 export default {
   name: "app-pagination",
@@ -42,23 +45,30 @@ export default {
     }
   },
   computed: {
-    ...mapState(["currentPage", "totalPages", "itemsPerPage"]),
-    ...mapGetters(["getTotalPages"])
+    ...mapState(["currentPage", "totalPages", "size", "numberOfElements"]),
+    ...mapGetters(["getTotalPages"]),
+    ...mapMutations(["setNumberOfElements"])
   },
   methods: {
-    ...mapActions(["changePage", "changeItemPerPage"]),
+    ...mapActions(["changePage", "changeSize", "clearState"]),
 
     updatePages(number) {
-      this.changeItemPerPage(number);
+      this.changeSize(number);
+      this.changePage(1);
+      scrollToTop();
     },
     changePageFunc(num) {
       this.changePage(num);
-    }
+      scrollToTop();
+    },
 
   },
   mounted() {
     this.changePage(1);
   },
+  unmounted() {
+    this.clearState()
+  }
 }
 </script>
 
