@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start": "node server.js"
   },
   "dependencies": {
     "@coreui/coreui": "^5.1.2",
@@ -14,6 +15,9 @@
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "core-js": "^3.8.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.0",
+    "mongodb": "^7.1.1",
     "vue": "^3.2.13",
     "vue-router": "^4.0.13",
     "vuex": "^4.0.2"
