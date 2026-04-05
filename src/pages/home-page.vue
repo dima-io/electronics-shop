@@ -3,7 +3,7 @@
   <top-search></top-search>
 <!--  <app-breadcrums></app-breadcrums>-->
   <app-carousel></app-carousel>
-  <div class="home-content">
+  <div class="home-content mt-sm-0 mt-md-3">
     <app-four-cards
         :flag="'categories'"
         :cardList="categories"
@@ -134,12 +134,6 @@ export default {
 
 <style scoped>
 
-@media (max-width: 768px) {
-    .home-content {
-      top: 0;
-      margin-top: 50px;
-    }
-  }
 
 .brands__image {
   width: 100%;

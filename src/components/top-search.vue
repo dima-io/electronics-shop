@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-sm-3 mt-lg-0 mb-lg-3 search">
+  <div class="container mt-sm-3 mt-lg-0 mb-3 search">
     <div class="row">
       <div class="col-lg-12">
         <div class="input-group">
@@ -130,6 +130,12 @@ export default {
   color: var(--bs-list-group-action-hover-color);
   text-decoration: none;
   background-color: var(--bs-list-group-action-hover-bg);
+}
+
+@media (max-width: 992px) {
+  .form-control {
+    font-size: 14px;
+  }
 }
 
 </style>

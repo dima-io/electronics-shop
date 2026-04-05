@@ -1,8 +1,8 @@
 <template>
   <div class="cards-information mb-lg-5" v-if="cardsData">
-    <div class="section-title my-5" v-if="title">{{ title }}</div>
-    <div class="d-flex flex-wrap justify-content-sm-center justify-content-lg-start gap-lg-3 gap-md-4 gap-sm-1">
-      <div v-for="card in paginatedCards" :key="card.id" class="mb-4">
+    <div class="section-title my-5 text-center" v-if="title">{{ title }}</div>
+    <div class="d-flex flex-column flex-sm-row flex-wrap justify-content-center justify-content-lg-start gap-lg-3 gap-md-4 gap-sm-1">
+      <div v-for="card in paginatedCards" :key="card.id" class="card-wrapper">
         <div class="card h-100 cards-information-block">
           <div class="card-body d-flex flex-column justify-content-between">
             <img
@@ -98,7 +98,6 @@ export default {
       if(this.$route.path !== '/') {
         const start = (this.currentPage - 1) * this.size;
         const end = start + this.size;
-
         return this.allCards.slice(start, end);
       }
       return this.allCards;
@@ -155,12 +154,10 @@ export default {
   mounted() {
     this.setNumberOfElements(0)
   }
-
 }
 </script>
 
 <style scoped>
-
 .section-title {
   color: #333;
   font-size: 2.5rem;
@@ -173,6 +170,7 @@ export default {
   align-items: center;
   justify-content: center;
 }
+
 .cards-information__title a {
   color: #000;
   text-decoration: none;
@@ -189,6 +187,7 @@ export default {
   color: #2c80e5;
   text-decoration: underline;
 }
+
 .icon-button {
   width: 34px;
   height: 34px;
@@ -207,10 +206,6 @@ export default {
   line-height: 1;
   display: inline-block;
   vertical-align: bottom;
-}
-
-.icon-button:first-child:hover {
-  width: 250px;
 }
 
 .cart-button {
@@ -233,6 +228,7 @@ export default {
   transition: transform .5s;
   width: 13rem;
 }
+
 .cards-information-block:hover {
   cursor: pointer;
   transform: scale(1.1);
@@ -246,37 +242,62 @@ export default {
   opacity: 1;
 }
 
-.cards-information-block__cashback{
+.cards-information-block__cashback {
   color: #2c80e5;
   text-transform: uppercase;
   font-size: 12px;
   margin-top: 5px;
 }
 
+.card-wrapper {
+  width: 100%;
+  padding-bottom: 16px;
+}
+
+@media (min-width: 576px) {
+  .card-wrapper {
+    width: auto;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .cards-information-block:hover {
+    transform: none;
+  }
+}
+
 .cards-information-block__stars {
   color: #ffb700;
 }
 
-@media(max-width: 434px) {
+@media (max-width: 576px) {
   .cards-information-block {
-    width: 9.3rem;
+    width: 100%;
   }
 }
-@media(min-width: 576px) {
+
+@media (min-width: 576px) {
   .cards-information-block {
     width: 15.8rem;
   }
 }
 
 @media (min-width: 768px) {
-  .cards-information-block[data-v-3c0180e2] {
+  .cards-information-block {
     width: 20.5rem;
   }
 }
 
 @media (min-width: 992px) {
-  .cards-information-block[data-v-3c0180e2] {
+  .cards-information-block {
     width: 18.1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .cards-information-block:hover {
+    transform: none;
   }
 }
 </style>
