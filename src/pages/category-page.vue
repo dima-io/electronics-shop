@@ -84,13 +84,16 @@ export default {
 
     },
     fetchCategoriesFromStore() {
-      if (this.btnSearTerm) {
-        return;
-      }
+      if (this.btnSearTerm) return;
+
       const params = {};
-      this.query ? params.name = this.query.toLowerCase() : null;
+      if (this.query) params.name = this.query.toLowerCase();
+
       this.$store
-          .dispatch("fetchCategoriesData", { category: null, queryParam: (this.selectedItem ? null  : params.name) || null })
+          .dispatch("fetchCategoriesData", {
+            category: null,
+            queryParam: params.name || null // ← прибрали умову з selectedItem
+          })
           .then(() => {
             this.displaySpecificCards();
           });
@@ -201,7 +204,9 @@ export default {
 
   },
   created() {
-    this.prm === 'brands' ? this.fetchBrandsFromStore() : this.fetchCategoriesFromStore();
+    this.prm === 'brands'
+        ? this.fetchBrandsFromStore()
+        : this.fetchCategoriesFromStore();
 
     if (this.selectedItem) {
       this.cardsDataFromStore = this.getDeviceById;
