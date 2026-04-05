@@ -1,4 +1,7 @@
 <template>
+  <top-nav-menu></top-nav-menu>
+  <top-search></top-search>
+<!--  <app-breadcrums></app-breadcrums>-->
   <app-carousel></app-carousel>
   <div class="home-content">
     <app-four-cards
@@ -69,11 +72,13 @@ import AppCarousel from "@/components/carousel";
 import AppCardsInformation from  "@/components/cards-information"
 import AppFourCards from "@/components/four-cards";
 import {mapMutations} from "vuex";
+import TopSearch from "@/components/top-search.vue";
+import TopNavMenu from "@/components/top-nav-menu.vue";
 
 
 export default {
   name: "home-page",
-  components: {AppFourCards, AppCarousel, AppCardsInformation},
+  components: {TopNavMenu, TopSearch, AppFourCards, AppCarousel, AppCardsInformation},
   ...mapMutations(['clearState']),
 
   methods: {

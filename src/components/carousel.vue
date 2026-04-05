@@ -11,35 +11,35 @@
       <div class="carousel-item active">
         <div class="slide slide-1">
           <div class="slide__content">
-            <span class="h1">Нащо воно тобі, купи звичайну ручку</span>
+            <span class="h1">Знайди свій стиль</span>
           </div>
         </div>
       </div>
       <div class="carousel-item">
         <div class="slide slide-2">
           <div class="slide__content">
-            <span class="h1">Заряджайся свіжою музикою</span>
+            <span class="h1">Забудь про дроти</span>
           </div>
         </div>
       </div>
       <div class="carousel-item">
         <div class="slide slide-3">
           <div class="slide__content">
-            <span class="h1">Іди погуляй та щось пофоткай</span>
+            <span class="h1">Залишайся на зв'язку з природою</span>
           </div>
         </div>
       </div>
       <div class="carousel-item">
         <div class="slide slide-4">
           <div class="slide__content">
-            <span class="h1">Новий старт - нові можливості</span>
+            <span class="h1">Зроби світ яскравим</span>
           </div>
         </div>
       </div>
       <div class="carousel-item">
         <div class="slide slide-5">
           <div class="slide__content">
-            <span class="h1">Хай Вася покаже як там налаштовувати нічний режим</span>
+            <span class="h1">Зроби ніч яскравою</span>
           </div>
         </div>
       </div>
@@ -63,12 +63,18 @@ export default {
 
 <style scoped>
 .slide {
-  position: relative;
-  min-width: 100vw;
-  min-height: 604px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 60px;
+  min-height: 400px;
   background-size: cover;
-  background-position: center;
+  background-position: center center; /* важливо */
+  background-repeat: no-repeat;
+  color: white;
 }
+
+
 
 .slide-4 {
   background-image: url('../../public/assets/img/gross-camera.jpg');
@@ -90,16 +96,7 @@ export default {
 }
 
 .slide__content {
-  color: white;
-  position: absolute;
-  bottom: 100px;
-  left: 180px;
+  text-align: center;
   max-width: 500px;
-}
-
-@media (max-width: 768px) {
-  .carousel {
-    display: none;
-  }
 }
 </style>

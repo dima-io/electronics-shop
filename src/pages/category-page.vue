@@ -1,4 +1,7 @@
 <template>
+  <top-nav-menu></top-nav-menu>
+  <top-search></top-search>
+  <app-breadcrums></app-breadcrums>
   <div class="container">
     <app-cards-information v-if="cardsDataFromStore && cardsDataFromStore && cardsDataFromStore.length" :cardsData="cardsDataFromStore"></app-cards-information>
   </div>
@@ -6,11 +9,16 @@
 
 <script>
 import AppCardsInformation from "@/components/cards-information";
+import TopSearch from "@/components/top-search.vue";
+import TopNavMenu from "@/components/top-nav-menu.vue";
+import AppBreadcrums from "@/components/breadcrums.vue";
 
 export default {
   name: "category-page",
   components: {
-    AppCardsInformation
+    TopNavMenu, TopSearch,
+    AppCardsInformation,
+    AppBreadcrums
   },
   props: ["prm"],
   data() {
