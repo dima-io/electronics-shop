@@ -142,7 +142,7 @@
               <div class="card subscribe__block ms-lg-5" style="width: 15rem">
                 <div class="card-body">
                   <img
-                      src="../../public/assets/images/footer_subscribe.webp"
+                      src="../../public/assets/img/footer_subscribe.webp"
                       class="card-img-top"
                       alt="Card image"
                   >
@@ -290,7 +290,7 @@ export default {
     margin-bottom: 27px;
     background-size: auto 100%;
     background-position: 30px;
-    background-image: url(../../public/assets/images/footer_subscribe.webp)
+    background-image: url(../../public/assets/img/footer_subscribe.webp)
   }
 
   .subscribe__form {

@@ -1,12 +1,25 @@
-import axios from "axios";
+import db from '../db.json';
 
-export default {
-
+class ApiService {
     getBrands(queryParam = '') {
-        return axios.get(`/brands?name=${queryParam}`)
-    },
+        let brands = db.brands;
+        if (queryParam) {
+            brands = brands.filter(b =>
+                b.name.toLowerCase().includes(queryParam.toLowerCase())
+            );
+        }
+        return Promise.resolve({ data: brands });
+    }
 
     getCategories(queryParam) {
-        return queryParam ? axios.get(`/categories?name=${queryParam}`) : axios.get(`/categories`);
+        let categories = db.categories;
+        if (queryParam) {
+            categories = categories.filter(c =>
+                c.name.toLowerCase().includes(queryParam.toLowerCase())
+            );
+        }
+        return Promise.resolve({ data: categories });
     }
 }
+
+export default new ApiService();

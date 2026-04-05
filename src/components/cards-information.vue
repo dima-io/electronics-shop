@@ -6,12 +6,30 @@
         <div class="card h-100 cards-information-block">
           <div class="card-body d-flex flex-column justify-content-between">
             <img
+                v-if="card.hoverImage"
                 @mouseenter="card.hovered = true"
                 @mouseleave="card.hovered = false"
                 class="card-img-top"
                 alt="Card image"
-                :src="card.hovered && card.hoverImage ? `/assets/images${card.hoverImage}` : `/assets/images${card.defaultImage}`"
+                :src="card.hovered && card.hoverImage ? `/assets/img${card.hoverImage}` : `/assets/img${card.firstImage}`"
             />
+            <svg
+                v-else
+                width="100%"
+                height="100%"
+                viewBox="0 0 400 300"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="400" height="300" fill="#f3f4f6"/>
+              <g opacity="0.5">
+                <rect x="120" y="90" width="160" height="120" rx="8" fill="#d1d5db"/>
+                <circle cx="170" cy="130" r="12" fill="#9ca3af"/>
+                <path d="M130 190 L180 150 L220 180 L260 140 L280 190 Z" fill="#9ca3af"/>
+              </g>
+              <text x="200" y="240" text-anchor="middle" fill="#6b7280" font-size="16">
+                No Image Available
+              </text>
+            </svg>
             <div class="cards-information__title">
               <a href="#">{{ card.title }}</a>
             </div>
@@ -104,7 +122,7 @@ export default {
             price: card.price,
             rate: card.rate,
             cashback: card.cashback,
-            defaultImage: card.imageUrl,
+            firstImage: card.imageUrl,
             hoverImage: card.imageUrl1,
             hovered: card.hovered || false
           };
